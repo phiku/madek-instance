@@ -1,0 +1,3 @@
+[submodule "Madek"]
+	path = Madek
+	url = https://github.com/Madek/Madek
