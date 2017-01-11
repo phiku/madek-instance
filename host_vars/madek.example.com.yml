@@ -1,0 +1,11 @@
+# connection
+# ansible_ssh_host: madek.example.com
+# madek_external_hostname: madek.example.com
+ansible_ssh_user: root
+
+# storage
+setup_storage_directories: true
+madek_storage_dir: /srv/madekdata
+madek_file_storage_dir: /srv/madekdata/attachments
+madek_thumbnail_storage_dir: /srv/madekdata/attachments
+madek_tmp_dir: /srv/madekdata/tmp
