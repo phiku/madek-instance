@@ -22,3 +22,5 @@
   - per-host config in file `host_vars/madek.example.com.yml`, rename it to match the hostname
 
 1. install `ansible-playbook -i hosts Madek/deploy/play_setup-and-deploy.yml`
+
+1. (setup admin account)
