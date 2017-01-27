@@ -1,2 +1,2 @@
-# DONT ignore the secret - its encrypt with git-crypt!
+# DONT ignore the secret - its encrypted with git-crypt!
 !master_secret.txt
