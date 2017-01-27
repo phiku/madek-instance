@@ -7,7 +7,6 @@ jobs:
     context:
       task_defaults:
         max_trials: 1
-        git_options: {submodules: {include_match: ^.*$}}
         aggregate_state: satisfy-last
         traits:
           Ansible 2: yes
@@ -27,17 +26,19 @@ jobs:
           scripts:
             deploy:
               start_when:
+                submodules are checked out: {script_key: checkout-submodules}
                 git-crypt is unlocked: {script_key: unlock}
                 only when we are on the head of master branch: {script_key: check-head-of-master}
 
               timeout: 30 minutes
               body: cd Madek/deploy && ansible-playbook -i "../../${HOSTS_FILE}" play_setup-and-deploy.yml
 
-            check-head-of-master:
-              body: |
-                set -eux
-                git fetch --all
-                [[ $(git log -n 1 --pretty=%H HEAD -- ) == $(git log -n 1 --pretty=%H origin/master -- ) ]]
-
             unlock:
-              body: git crypt unlock && ls -R group_vars
+              body: git crypt unlock && ls -la . && ls -R group_vars
+
+            check-head-of-master:
+              body: git fetch && test $(git log -n 1 --pretty=%H HEAD -- ) == $(git log -n 1 --pretty=%H origin/master -- )
+
+            checkout-submodules:
+              start_when: {after: {script_key: check-head-of-master}}
+              body: git submodule update --init Madek && cd Madek && git submodule update --init --recursive deploy
