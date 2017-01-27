@@ -1,15 +1,14 @@
 # Madek Hosting Guide
 
-## quickstart
+## setup & install
 
 1. ["Fork" this repository on github](https://github.com/Madek/madek-instance/fork)
-  *(only required if you want to receive update notifications)*
+  *(only required if you want to receive updates as Pull Requests)*
 
-1. clone it to a computer running Linux or macOS: `git clone git@github:yourUserName/madek-instance my-madek`
-
-1. setup:
+1. set up inventory on a computer running Linux or macOS (will be the "control machine")
   ```sh
   which ansible-playbook || echo "install ansible first!"
+  git clone git@github:yourUserName/madek-instance my-madek
   cd my-madek
   git submodule update --init Madek
   cd Madek && git reset --hard origin/release && git submodule update --init --recursive deploy && cd -
@@ -18,20 +17,32 @@
 1. prepare a server running [Debian `jessie`](https://www.debian.org/releases/jessie/),
   log in as root via SSH and do `apt-get install python`
 
-1. configure
-  - fill in hostname in file `hosts`
-  - global config in file `group_vars/madek.yml`
-  - per-host config in file `host_vars/madek.example.com.yml`, rename it to match the hostname
+1. inventory configuration
+  - prepare inventory files
+    ```
+    # set hostname
+    export MADEK_HOSTNAME="madek.example.com"
+    # create hosts file
+    sh -c "echo \"$(cat examples/hosts_example)\"" > hosts
+    # create host_vars
+    sh -c "echo \"$(cat examples/host_vars_example.yml)\"" > "host_vars/${MADEK_HOSTNAME}.yml"
+    ```
+  - edit global config in file `group_vars/madek.yml`
+  - edit per-host config in file `host_vars/madek.example.com.yml`
 
 1. install with ansible
   ```sh
   ansible-playbook -i hosts Madek/deploy/play_setup-and-deploy.yml
   ```
 
-1. setup initial configuration & admin account:
+1. setup initial configuration & admin account (choose a better password and save it):
   ```sh
-  ansible-playbook -i hosts Madek/deploy/play_first-time-setup.yml
+  ansible-playbook -i hosts Madek/deploy/play_first-time-setup.yml -e "admin_password=supersecret"
   ```
+
+1. Log in as the admin user and go to the admin interface.
+   Change the password to a stronger one, customize the name of the instance and other settings.
+   Add Users and Groups and start using Madek! 🎉
 
 ## backup
 
@@ -39,14 +50,24 @@ A `master_secret` was created during the installation and put in a text file
 in your repository.
 By default it is git-ignored, so it won't be accidentially pushed to a public
 host (like GitHub).
-You should either back up your local repository to a secure place;
+You should either back up your local repository with the secret to a secure place;
 or use [`git-crypt`](https://www.agwa.name/projects/git-crypt/) to add the
 secret to the repository in encrypted form (*recommended*).
 
 ## upgrade
 
-1. update Madek submodule reference to latest release
+1. update `Madek` submodule reference to latest release
   - either by accepting a Pull Request (when enabled)
-  - or manually: `cd Madek && git fetch && git reset --hard origin/release && cd -`
+  - or manually: `./scripts/update_madek_latest release`
 
 1. run the setup playbook again: `ansible-playbook -i hosts Madek/deploy/play_setup-and-deploy.yml`
+
+## automatic deployments
+
+Prerequisite: All changed files (configuration etc) must be commited back into the repository,
+so that it can be shared with other computers.
+Note that you can use this fork normally, with one caveat:
+**don't edit any files that came with this repository**, or you will have to deal with merge conflicts later on!
+The only exception is `README.md`, we won't touch it because you'll likely want to customize it.
+
+# git-crypt

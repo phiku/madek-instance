@@ -1,6 +1,8 @@
+---
 # connection
-# ansible_ssh_host: madek.example.com
-# madek_external_hostname: madek.example.com
+ansible_ssh_host: ${MADEK_HOSTNAME}
+madek_external_hostname: ${MADEK_HOSTNAME}
+ansible_ssh_port: 22
 ansible_ssh_user: root
 
 # storage

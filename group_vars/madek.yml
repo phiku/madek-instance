@@ -6,10 +6,6 @@ zencoder_enabled: false
 # backups
 # db_backups_enabled: False
 
-# branding
-madek_site_title: "Media Archive"
-madek_welcome_title: "Welcome to Madek!"
-
 # madek_webapp_html_extra_head_start: |
 #   <!--
 #        __       __                  __            __
