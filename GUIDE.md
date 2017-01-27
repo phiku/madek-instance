@@ -64,10 +64,31 @@ secret to the repository in encrypted form (*recommended*).
 
 ## automatic deployments
 
-Prerequisite: All changed files (configuration etc) must be commited back into the repository,
+***Prerequisite:*** All changed files (configuration etc) must be committed back into the repository,
 so that it can be shared with other computers.
-Note that you can use this fork normally, with one caveat:
+That means `git-crypt` must be set up (see below).
+
+*Note* that you can use this fork normally, with one caveat:
 **don't edit any files that came with this repository**, or you will have to deal with merge conflicts later on!
 The only exception is `README.md`, we won't touch it because you'll likely want to customize it.
 
-# git-crypt
+1. add GPG of your trusted CI machine to the repo:
+  ```
+  git crypt add-gpg-user ${CI_GPG_KEY_ID}
+  ```
+
+1. add SSH public key of CI executor to `authorized_keys` of target server
+
+1. set up your CI to `git crypt unlock` und run the deploy script.
+  See `examples/cider-ci.yml` for a working [Cider-CI](https://cider-ci.info) configuration.
+
+## git-crypt
+
+```
+which git-crypt || echo 'install `git-crypt` first!'
+cp examples/git-crypt/.git{ignore,attributes} .
+git commit .gitignore .gitattributes -m 'setup git-crypt'
+git crypt init
+git crypt add-gpg-user you@example.com
+git commit master_secret.txt -m 'add encrypted secret'
+```
