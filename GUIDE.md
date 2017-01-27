@@ -1,5 +1,10 @@
 # Madek Hosting Guide
 
+*For more details, see [Madek-Deploy Project](https://github.com/Madek/madek-deploy)
+and the [general Madek Documentation](https://madek.readthedocs.io/)*
+
+---
+
 ## setup & install
 
 1. ["Fork" this repository on github](https://github.com/Madek/madek-instance/fork)
