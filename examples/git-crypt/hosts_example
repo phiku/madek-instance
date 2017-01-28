@@ -1,0 +1,5 @@
+[secrets]
+${MADEK_HOSTNAME}
+
+[madek]
+${MADEK_HOSTNAME}

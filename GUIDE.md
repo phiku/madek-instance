@@ -15,8 +15,7 @@ and the [general Madek Documentation](https://madek.readthedocs.io/)*
   which ansible-playbook || echo "install ansible first!"
   git clone git@github:yourUserName/madek-instance my-madek
   cd my-madek
-  git submodule update --init Madek
-  cd Madek && git reset --hard origin/release && git submodule update --init --recursive deploy && cd -
+  sh -c 'git submodule update --init Madek && cd Madek && git submodule update --init --recursive deploy'
   ```
 
 1. prepare a server running [Debian `jessie`](https://www.debian.org/releases/jessie/),
@@ -89,11 +88,25 @@ The only exception is `README.md`, we won't touch it because you'll likely want 
 
 ## git-crypt
 
-```
+set up and add master secret:
+
+```sh
 which git-crypt || echo 'install `git-crypt` first!'
 cp examples/git-crypt/.git{ignore,attributes} .
 git commit .gitignore .gitattributes -m 'setup git-crypt'
 git crypt init
 git crypt add-gpg-user you@example.com
-git commit master_secret.txt -m 'add encrypted secret'
+git add master_secret.txt && git commit -m 'add encrypted secret'
+git crypt status
+```
+
+if needed, set up secret variables:
+
+```sh
+# create hosts file
+sh -c "echo \"$(cat examples/git-crypt/hosts_example)\"" > hosts
+# create host_vars
+sh -c "echo \"$(cat examples/git-crypt/group_vars_secret_example.yml)\"" > group_vars/secrets.yml
+git add group_vars/secrets.yml && git commit -m 'add encrypted secrets'
+git crypt status
 ```
