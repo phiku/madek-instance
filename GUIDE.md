@@ -62,7 +62,7 @@ secret to the repository in encrypted form (*recommended*).
 
 1. update `Madek` submodule reference to latest release
   - either by accepting a Pull Request (when enabled)
-  - or manually: `./scripts/update_madek_latest release`
+  - or manually: `./scripts/update_madek_latest stable`
 
 1. run the setup playbook again: `ansible-playbook -i hosts Madek/deploy/play_setup-and-deploy.yml`
 
