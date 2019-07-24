@@ -62,7 +62,7 @@ secret to the repository in encrypted form (*recommended*).
 
 1. update `Madek` submodule reference to latest release
   - either by accepting a Pull Request (when enabled)
-  - or manually: `./scripts/update_madek_latest release`
+  - or manually: `./scripts/update_madek_latest stable`
 
 1. run the setup playbook again: `ansible-playbook -i hosts Madek/deploy/play_setup-and-deploy.yml`
 
@@ -110,3 +110,18 @@ sh -c "echo \"$(cat examples/git-crypt/group_vars_secret_example.yml)\"" > group
 git add group_vars/secrets.yml && git commit -m 'add encrypted secrets'
 git crypt status
 ```
+
+## HTTPS
+
+Secure Communications for your users (HTTPS) can be enabled
+by obtaining a TLS certificate and configure apache to use it.
+This can be done easily using `certbot` by [LetsEncrypt](https://letsencrypt.org).
+
+
+1. Install `certbot`: `sudo apt-get install python-certbot-apache -t jessie-backports`
+2. Get cert: `certbot certonly --apache -d madek.example.com`
+3. Configure apache: `certbot run -n --apache --redirect --apache-vhost-root /etc/apache2/madek -d madek.example.com`
+  - even more secure (SSL Labs `A+` instead of `A`): `certbot run -n --apache --redirect --hsts --uir --strict-permissions --apache-vhost-root /etc/apache2/madek -d madek.example.com`
+
+If a certificate set up this way is found on the server, the deploy process will automatically use `certbot` for configuration with recommended settings.
+You only have to re-run `certbot` yourself after each deploy if you prefer other settings.
