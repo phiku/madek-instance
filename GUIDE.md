@@ -7,8 +7,7 @@ and the [general Madek Documentation](https://madek.readthedocs.io/)*
 
 ## setup & install
 
-1. ["Fork" this repository on github](https://github.com/Madek/madek-instance/fork)
-  *(only required if you want to receive updates as Pull Requests)*
+1. [Generate your own inventory repository by using this template](https://github.com/Madek/madek-instance/generate)
 
 1. set up inventory on a computer running Linux or macOS (will be the "control machine")
   ```sh
