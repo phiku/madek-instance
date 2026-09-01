@@ -1,8 +1,23 @@
-#!/bin/sh -exu
-CHANNEL=$1
+#!/bin/bash -exu
+
+RELEASE_NAME=$1
+CHANNEL=${2:-stable}
+
+git pull
 
 cd Madek
 git fetch
 git submodule foreach --recursive 'git reset --hard HEAD'
 git reset --hard "origin/${CHANNEL}"
-git submodule update --recursive deploy
+git submodule update --recursive --init --force
+
+cd -
+git add Madek
+
+if [[ -n "${RELEASE_NAME}" ]]; then
+  git commit -m "[Madek] ${RELEASE_NAME}"
+else
+  git commit -m "[Madek] x.y.z" --edit
+fi
+
+git push
